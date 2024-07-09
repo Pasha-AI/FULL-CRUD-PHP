@@ -26,6 +26,9 @@ $title = 'Daftar Barang';
 // Include header
 include 'layout/header.php';
 
+$jumlahHalaman = 1; // Default value
+$halamanAktif = 1; // Default value
+
 if (isset($_POST['filter'])) {
   $tgl_awal = strip_tags($_POST['tgl_awal'] . "00:00:00");
   $tgl_akhir = strip_tags($_POST['tgl_akhir'] . "23:59:59");
@@ -41,8 +44,7 @@ if (isset($_POST['filter'])) {
   $halamanAktif = (isset($_GET['halaman']) ? $_GET['halaman'] : 1);
   $awalData = ($jumlahDataPerhalaman * $halamanAktif) - $jumlahDataPerhalaman;
 
-  $data_barang = select("SELECT * FROM barang ORDER BY id_barang DESC LIMIT $awalData,
-  $jumlahDataPerhalaman");
+  $data_barang = select("SELECT * FROM barang ORDER BY id_barang DESC LIMIT $awalData, $jumlahDataPerhalaman");
 }
 
 // Database query to fetch barang data
@@ -84,7 +86,7 @@ $barang = select("SELECT * FROM barang ORDER BY id_barang ASC");
               <!-- /.card-header -->
               <div class="card-body">
               <a href="tambah-barang.php" class="btn btn-primary mb-2"><i class="fas fa-plus"></i>Tambah</a>
-              <button type="button" class="btn btn-success btn-sm mb-2" data-toggle="modal" data-target="#modalFilter"><i class="fas fa-search">Filter Data</i></button>
+              <button type="button" class="btn btn-success mb-2" data-toggle="modal" data-target="#modalFilter">Filter Data</button>
                 <table   class="table table-bordered table-hover">
                 <thead>
             <tr>
@@ -109,8 +111,9 @@ $barang = select("SELECT * FROM barang ORDER BY id_barang ASC");
                         <img src="barcode.php?codetype=Code128&size=15&text=<?= $item['barcode']; ?>& print=true" alt="barcode" />
                     </td>
                     <td><?= date("d/m/Y | H:i:s", strtotime($item['tanggal'])); ?></td>
-                    <td class="text-center" width="30%" >
+                    <td class="text-center" width="30%">
                         <a href="ubah-barang.php?id_barang=<?= $item['id_barang']; ?>" class="btn btn-success"><i class="fas fa-edit"></i>Ubah</a>
+                        
                         <a href="hapus-barang.php?id_barang=<?= $item['id_barang']; ?>" class="btn btn-danger" onclick="return confirm('Yakin data barang akan dihapus')"><i class="fas fa-trash"></i>Hapus</a>
                     </td>
                 </tr>
@@ -141,7 +144,7 @@ $barang = select("SELECT * FROM barang ORDER BY id_barang ASC");
   <ul class="pagination">
     <?php if($halamanAktif > 1) : ?>
     <li class="page-item">
-      <a class="page-link" href="halaman=<?= $halamanAktif - 1 ?>" aria-label="Previous">
+      <a class="page-link" href="?halaman=<?= $halamanAktif - 1 ?>" aria-label="Previous">
         <span aria-hidden="true">&laquo;</span>
       </a>
     </li>
@@ -149,23 +152,19 @@ $barang = select("SELECT * FROM barang ORDER BY id_barang ASC");
 
     <?php for ($i =1; $i <= $jumlahHalaman; $i++) : ?>
       <?php if ($i == $halamanAktif) : ?>
-    <li class="page-item active"><a class="page-link" href="?halaman=<?= $i; ?>"><?=
-    $i; ?></a></li>
+    <li class="page-item active"><a class="page-link" href="?halaman=<?= $i; ?>"><?= $i; ?></a></li>
 <?php else : ?>
-    <li class="page-item"><a class="page-link" href="?halaman=<?= $i; ?>"><?= $i; ?>
-  </a></li>
+    <li class="page-item"><a class="page-link" href="?halaman=<?= $i; ?>"><?= $i; ?></a></li>
   <?php endif; ?>
   <?php endfor; ?>
 
   <?php if ($halamanAktif < $jumlahHalaman) : ?>
     <li class="page-item">
-
-    </li>
       <a class="page-link" href="?halaman=<?= $halamanAktif + 1 ?>" aria-label="Next">
         <span aria-hidden="true">&raquo;</span>
       </a>
     </li>
-    <?php endif; ?>
+  <?php endif; ?>
 
   </ul>
 </nav>
