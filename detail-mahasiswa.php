@@ -2,7 +2,7 @@
 
 session_start();
 
-// membatasi halaman sebelum login
+// Membatasi halaman sebelum login
 if (!isset($_SESSION["login"])) {
     echo "<script>
     alert('login dulu bos');
@@ -26,7 +26,7 @@ $mahasiswa = select("SELECT * FROM mahasiswa WHERE id_mahasiswa = $id_mahasiswa"
 <div class="container mt-5">
     <h1>Data <?= $mahasiswa['nama']; ?></h1>
     <hr>
-    
+
     <table class="table table-bordered table-striped mt-3">
         <tr>
             <td>Nama</td>
@@ -55,10 +55,10 @@ $mahasiswa = select("SELECT * FROM mahasiswa WHERE id_mahasiswa = $id_mahasiswa"
         <tr>
             <td>Foto</td>
             <td>
-            <a href="assets/img/<?= $mahasiswa['foto']; ?>">
-            <img src="assets/img/<?= $mahasiswa['foto']; ?>" alt="foto" width="25%">
+                <a href="assets/img/<?= $mahasiswa['foto']; ?>">
+                    <img src="assets/img/<?= $mahasiswa['foto']; ?>" alt="foto" width="25%">
             </td>
-                </a>    
+            </a>
         </tr>
     </table>
 
