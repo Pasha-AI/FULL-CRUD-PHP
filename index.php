@@ -15,7 +15,7 @@ if (!isset($_SESSION['login'])) {
 if ($_SESSION["level"] != 1 && $_SESSION["level"] != 2) {
     echo "<script>
         alert('Anda tidak memiliki hak akses');
-        document.location.href = 'crud-modal.php';
+        document.location.href = 'akun.php';
         </script>";
     exit;
 }
@@ -34,8 +34,15 @@ if (isset($_POST['filter'])) {
   $data_barang = select("SELECT * FROM barang WHERE tanggal BETWEEN '$tgl_awal' AND '$tgl_akhir' ORDER BY id_barang DESC");
 
 } else {
-  //query tampil seluruh data
-  $data_barang = select("SELECT * FROM barang ORDER BY id_barang DESC");
+  // query tampil data dengan pagination
+  $jumlahDataPerhalaman = 1;
+  $jumlahData = count(select("SELECT * FROM barang"));
+  $jumlahHalaman = ceil($jumlahData / $jumlahDataPerhalaman);
+  $halamanAktif = (isset($_GET['halaman']) ? $_GET['halaman'] : 1);
+  $awalData = ($jumlahDataPerhalaman * $halamanAktif) - $jumlahDataPerhalaman;
+
+  $data_barang = select("SELECT * FROM barang ORDER BY id_barang DESC LIMIT $awalData,
+  $jumlahDataPerhalaman");
 }
 
 // Database query to fetch barang data
@@ -49,12 +56,12 @@ $barang = select("SELECT * FROM barang ORDER BY id_barang ASC");
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Data Barang</h1>
+            <h1 class="m-0"><i class="nav-icon fas fa-box"></i>Data Barang</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Dashboard v1</li>
+              
+              <li class="breadcrumb-item active">Data Barang</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -76,9 +83,9 @@ $barang = select("SELECT * FROM barang ORDER BY id_barang ASC");
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-              <a href="tambah-barang.php" class="btn btn-primary mb-2"><i class="fas fa-plus"></i>Tambah Barang</a>
+              <a href="tambah-barang.php" class="btn btn-primary mb-2"><i class="fas fa-plus"></i>Tambah</a>
               <button type="button" class="btn btn-success btn-sm mb-2" data-toggle="modal" data-target="#modalFilter"><i class="fas fa-search">Filter Data</i></button>
-                <table id="example2" class="table table-bordered table-hover">
+                <table   class="table table-bordered table-hover">
                 <thead>
             <tr>
                 <th>No</th>
@@ -102,9 +109,9 @@ $barang = select("SELECT * FROM barang ORDER BY id_barang ASC");
                         <img src="barcode.php?codetype=Code128&size=15&text=<?= $item['barcode']; ?>& print=true" alt="barcode" />
                     </td>
                     <td><?= date("d/m/Y | H:i:s", strtotime($item['tanggal'])); ?></td>
-                    <td width="20%" class="text-center">
-                        <a href="ubah-barang.php?id_barang=<?= $item['id_barang']; ?>" class="btn btn-success">Ubah</a>
-                        <a href="hapus-barang.php?id_barang=<?= $item['id_barang']; ?>" class="btn btn-danger" onclick="return confirm('Yakin data barang akan dihapus')">Hapus</a>
+                    <td class="text-center" width="30%" >
+                        <a href="ubah-barang.php?id_barang=<?= $item['id_barang']; ?>" class="btn btn-success"><i class="fas fa-edit"></i>Ubah</a>
+                        <a href="hapus-barang.php?id_barang=<?= $item['id_barang']; ?>" class="btn btn-danger" onclick="return confirm('Yakin data barang akan dihapus')"><i class="fas fa-trash"></i>Hapus</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -129,6 +136,41 @@ $barang = select("SELECT * FROM barang ORDER BY id_barang ASC");
     <!-- /.content -->
   </div>
   
+  <div class="mt-2 justify-content-end d-flex">
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
+    <?php if($halamanAktif > 1) : ?>
+    <li class="page-item">
+      <a class="page-link" href="halaman=<?= $halamanAktif - 1 ?>" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    <?php endif; ?>
+
+    <?php for ($i =1; $i <= $jumlahHalaman; $i++) : ?>
+      <?php if ($i == $halamanAktif) : ?>
+    <li class="page-item active"><a class="page-link" href="?halaman=<?= $i; ?>"><?=
+    $i; ?></a></li>
+<?php else : ?>
+    <li class="page-item"><a class="page-link" href="?halaman=<?= $i; ?>"><?= $i; ?>
+  </a></li>
+  <?php endif; ?>
+  <?php endfor; ?>
+
+  <?php if ($halamanAktif < $jumlahHalaman) : ?>
+    <li class="page-item">
+
+    </li>
+      <a class="page-link" href="?halaman=<?= $halamanAktif + 1 ?>" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+    <?php endif; ?>
+
+  </ul>
+</nav>
+</div>
+<?php include 'layout/footer.php'; ?>
   <!-- Modal Filter -->
    <div class="modal fade" id="modalFilter" tabindex="-1" aria-labelledby="exampleModallabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -151,12 +193,10 @@ $barang = select("SELECT * FROM barang ORDER BY id_barang ASC");
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Batal</button>
-            <button type="button" class="btn btn-success btn-sm" name="filter">Submit</button>
+            <button type="submit" class="btn btn-success btn-sm" name="filter">Submit</button>
           </div>
          </form>
       </div>
     </div>
    </div>
-
-  <?php include 'layout/footer.php'; ?>
- 
+  

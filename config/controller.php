@@ -64,7 +64,7 @@ function delete_barang($id_barang){
     return mysqli_affected_rows($db);
 }
 
-// Fungsi menambahkan data mahasiswa(create)
+//fungsi menambahkan data mahasiswa
 function create_mahasiswa($post)
 {
     global $db;
@@ -73,7 +73,7 @@ function create_mahasiswa($post)
     $prodi = strip_tags($post['prodi']);
     $jk = strip_tags($post['jk']);
     $telepon = strip_tags($post['telepon']);
-    $alamat = $post['alamat'];
+    $alamat = strip_tags($post['alamat']);
     $email = strip_tags($post['email']);
     $foto = upload_file();
 
@@ -82,13 +82,15 @@ function create_mahasiswa($post)
         return false;
     }
 
-    // query tambah data
-    $query = "INSERT INTO mahasiswa VALUES(null, '$nama','$prodi','$jk', '$telepon', '$email', '$foto')";
+    //query tambah data
+    $query = "INSERT INTO mahasiswa VALUES(null, '$nama', '$prodi', '$jk', '$telepon', '$alamat', '$email', '$foto')";
 
     mysqli_query($db, $query);
 
     return mysqli_affected_rows($db);
 }
+
+
    
 // fungsi mengupload file
 function upload_file()
@@ -178,7 +180,7 @@ function delete_mahasiswa($id_mahasiswa)
     return mysqli_affected_rows($db);
 }
 
-// fungsi tambah akun
+// fungsi menambahkan akun
 function create_akun($post)
 {
     global $db;
@@ -200,28 +202,19 @@ function create_akun($post)
     return mysqli_affected_rows($db);
 }
 
+// fungsi menghapus akun
 function delete_akun($id_akun)
 {
     global $db;
 
-    // Prepare the DELETE statement
-    $query = $db->prepare("DELETE FROM akun WHERE id_akun = ?");
-    
-    // Bind the parameter
-    $query->bind_param("i", $id_akun);
-    
-    // Execute the statement
-    $query->execute();
-    
-    // Check if the query was successful
-    $affected_rows = $query->affected_rows;
-    
-    // Close the statement
-    $query->close();
-    
-    // Return the number of affected rows
-    return $affected_rows;
+    // query hapus data akun
+    $query = "DELETE FROM akun WHERE id_akun = $id_akun";
+
+    mysqli_query($db, $query);
+
+    return mysqli_affected_rows($db);
 }
+
 
 // fungsi ubah akun
 function ubah_akun($post)
@@ -250,6 +243,7 @@ function ubah_akun($post)
 
     return mysqli_affected_rows($db);
 }
+
 
 
 

@@ -8,7 +8,7 @@ include 'config/app.php';
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Dashboard</title>
+  <title><?= $title; ?></title>
     <!-- data tables -->
   <link rel="stylesheet" href="assets-template/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="assets-template/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
@@ -34,6 +34,8 @@ include 'config/app.php';
   <link rel="stylesheet" href="assets-template/plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="assets-template/plugins/summernote/summernote-bs4.min.css">
+  <!-- jQuery -->
+<script src="assets-template/plugins/jquery/jquery.min.js"></script>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -54,7 +56,7 @@ include 'config/app.php';
         <a href="index3.html" class="nav-link">Home</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Contact</a>
+        <a href="https://bersamadakwah.net/sholat-taubat/" class="nav-link">Tobrut</a>
       </li>
     </ul>
 
@@ -186,7 +188,7 @@ include 'config/app.php';
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link">
       <img src="assets-template/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">AdminLTE 3</span>
+      <span class="brand-text font-weight-light">Admin</span>
     </a>
 
     <!-- Sidebar -->
@@ -194,10 +196,10 @@ include 'config/app.php';
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="assets-template/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+          <img src="assets/img/andriuhuy.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Admin Mahasiswa</a>
+          <a href="#" class="d-block">Pasha Kebet</a>
         </div>
       </div>
 
@@ -219,34 +221,48 @@ include 'config/app.php';
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
                <li class="nav-header">Daftar Menu</li>
+               <?php if ($_SESSION['level'] == 1 or $_SESSION['level'] == 2) : ?>
          <li class="nav-item">
             <a href="index.php" class="nav-link">
                 <i class="nav-icon fas fa-box"></i>
                 <p>Data Barang</p>
             </a>
          </li>
+          <?php endif; ?>
+
+          <?php if ($_SESSION['level'] == 1 or $_SESSION['level'] == 3) : ?>
          <li class="nav-item">
             <a href="mahasiswa.php" class="nav-link">
                 <i class="nav-icon fas fa-user-graduate"></i>
                 <p>Data Mahasiswa</p>
             </a>
          </li>
-         
+         <?php endif; ?>
+
+         <?php if ($_SESSION['level'] == 1) : ?>
          <li class="nav-item">
             <a href="pegawai.php" class="nav-link">
                 <i class="nav-icon fas fa-users"></i>
                 <p>Data Pegawai (Realtime)</p>
             </a>
          </li>
+         <?php endif; ?>
+
          <li class="nav-item">
-            <a href="crud-modal.php" class="nav-link">
+            <a href="email.php" class="nav-link">
+                <i class="nav-icon fas fa-envelope"></i>
+                <p>Kirim Email (PHPMailer)</p>
+            </a>
+         </li>
+         <li class="nav-item">
+            <a href="akun.php" class="nav-link">
                 <i class="nav-icon fas fa-cog"></i>
                 <p>Data Akun</p>
             </a>
          </li>
          
          <li class="nav-item">
-            <a href="logout.php" class="nav-link" onclick="return confirm('Yakin ingin keluar.?')">
+            <a href="logout.php" class="nav-link" onclick="return confirm('Apakah Anda Yakin Ingin Keluar?')">
                 <i class="nav-icon fas fa-sign-out-alt"></i>
                 <p>Logout</p>
             </a>

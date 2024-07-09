@@ -13,7 +13,7 @@ if (!isset($_SESSION["login"])) {
 
 $title = 'Ubah Barang';
 
-include 'layout/header2.php';
+include 'layout/header.php';
 
 // mengambil id_barang dari url
 $id_barang = (int)$_GET['id_barang'];
@@ -36,8 +36,10 @@ if (isset($_POST['ubah'])) {
 }
 ?>
 
-<div class="container mt-5">
-    <h1>Ubah Barang</h1>
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+  <div class="container mt-5">
+  <h1>Ubah Barang</h1>
     <hr>
     <form action="" method="post">
 
@@ -64,5 +66,8 @@ if (isset($_POST['ubah'])) {
         <button type="submit" class="btn btn-primary" name="ubah" style="float: right;">Edit</button>
     </form>
 </div>
+  </div>
 
-<?php include 'layout/footer2.php'; ?>
+  <!-- /.content-wrapper -->
+  <?php include 'layout/footer.php'; ?>
+ 

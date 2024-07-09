@@ -13,7 +13,7 @@ if (!isset($_SESSION["login"])) {
 
 $title = 'Ubah Mahasiswa';
 
-include 'layout/header2.php';
+include 'layout/header.php';
 
 if (isset($_POST['ubah'])) {
     if (update_mahasiswa($_POST) > 0) {
@@ -36,7 +36,7 @@ $id_mahasiswa = (int)$_GET['id_mahasiswa'];
 $mahasiswa = select("SELECT * FROM mahasiswa WHERE id_mahasiswa = $id_mahasiswa")[0];
 
 ?>
-
+ <div class="content-wrapper">
 <div class="container mt-5">
     <h1>Ubah Mahasiswa</h1>
     <hr>
@@ -99,5 +99,20 @@ $mahasiswa = select("SELECT * FROM mahasiswa WHERE id_mahasiswa = $id_mahasiswa"
         <button type="submit" class="btn btn-primary" name="ubah" style="float: right;">Ubah</button>
     </form>
 </div>
+</div>
+<script>
+    function previewImg() {
+        const foto = document.querySelector('#foto');
+        const previewImg = document.querySelector('.img-preview');
 
-<?php include 'layout/footer2.php'; ?>
+        const fileFoto = new FileReader();
+        fileFoto.readAsDataURL(foto,files[0]);
+
+        fileFoto.onload = function(e) {
+            imgPreview.src = e.targe.result;
+        }
+    }
+</script>
+<br>
+<br>
+<?php include 'layout/footer.php'; ?>
