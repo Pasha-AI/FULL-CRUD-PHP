@@ -53,6 +53,7 @@ function update_barang($post)
 
     return mysqli_affected_rows($db);
 }
+
 //fungsi menghapus data barang
 function delete_barang($id_barang){
     global $db;
@@ -90,8 +91,6 @@ function create_mahasiswa($post)
     return mysqli_affected_rows($db);
 }
 
-
-   
 // fungsi mengupload file
 function upload_file()
 {
@@ -124,17 +123,18 @@ function upload_file()
             </script>";
             die();
     }
-            // generate nama file baru
-            $namaFileBaru = uniqid();
-            $namaFileBaru .= '.';
-            $namaFileBaru .= $extensifile;
 
-            // pindahkan ke folder local
-            move_uploaded_file($tmpName, 'assets/img/'. $namaFileBaru);
-            return $namaFileBaru;
-    }
+    // generate nama file baru
+    $namaFileBaru = uniqid();
+    $namaFileBaru .= '.';
+    $namaFileBaru .= $extensifile;
 
-    // Fungsi mengubah data mahasiswa
+    // pindahkan ke folder local
+    move_uploaded_file($tmpName, 'assets/img/'. $namaFileBaru);
+    return $namaFileBaru;
+}
+
+// Fungsi mengubah data mahasiswa
 function update_mahasiswa($post)
 {
     global $db;
@@ -215,7 +215,6 @@ function delete_akun($id_akun)
     return mysqli_affected_rows($db);
 }
 
-
 // fungsi ubah akun
 function ubah_akun($post)
 {
@@ -243,7 +242,3 @@ function ubah_akun($post)
 
     return mysqli_affected_rows($db);
 }
-
-
-
-
